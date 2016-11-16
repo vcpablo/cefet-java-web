@@ -5,6 +5,7 @@
 	 * Controladora de Listagem de Clientes
 	 */
 	function ControladoraListagemClientes(
+                        utils, 
 			servicoClientes,
 			$,
 			toastr,
@@ -29,13 +30,7 @@
 			registrarCliqueEmLinhas();
 		};
 		
-		var mostrarErro = function mostrarErro( jqXhr ) {
-			toastr.error( jqXhr.responseJSON.join( ", " ) );
-		};
 		
-		var mostrarSucesso = function mostrarSucesso( data ) {
-			toastr.success( data.join( ", " ) );
-		};
 		
 		var registrarCliqueEmLinhas = function registrarCliqueEmLinhas() {
 			$( '#clientes tbody tr' ).click( function linhaClick() {
@@ -45,7 +40,7 @@
 		};
 		
 		var removerCliente = function removerCliente() {
-			var id = idSelecionado();
+			var id = utils.idSelecionado();
 			if ( ! id ) {
 				toastr.info( 'Selecione um cliente.' );
 				return;
@@ -54,14 +49,14 @@
 			if ( ! ok ) { return; }
 			var promessa = servicoClientes.remover( id );
 			promessa.done( function ( data ) {
-				mostrarSucesso( data );
+				utils.mostrarSucesso( data );
 				$( '#clientes tbody .cor-linha' ).remove();
 			} );
-			promessa.fail( mostrarErro );
+			promessa.fail( utils.mostrarErro );
 		};
 		
 		var alterarCliente = function alterarCliente() {
-			var id = idSelecionado();
+			var id = utils.idSelecionado();
 			if ( ! id ) {
 				toastr.info( 'Selecione um cliente.' );
 				return;
@@ -79,17 +74,15 @@
 			$( '#novo' ).click( novoCliente );
 		};
 		
-		var idSelecionado = function idSelecionado() {
-			return parseInt( $( '#clientes tbody .cor-linha :first' ).html() );
-		};
+		
 		
 		this.configurar = function configurar() {
-			var promessa = servicoClientes.clientes();
-			promessa.done( listarClientes );
-			promessa.fail( mostrarErro );
-			
-			registrarCliqueEmLinhas();
-			registrarCliqueBotoes();
+                    var promessa = servicoClientes.clientes();
+                    promessa.done( listarClientes );
+                    promessa.fail( utils.mostrarErro );
+
+                    registrarCliqueEmLinhas();
+                    registrarCliqueBotoes();
 		};
 	}
 	

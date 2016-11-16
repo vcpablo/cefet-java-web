@@ -9,7 +9,7 @@ public class FabricaConexao {
 	public Connection criar() throws SQLException, ClassNotFoundException {
 		Class.forName( "com.mysql.jdbc.Driver" );
 		String url = "jdbc:mysql://127.0.0.1/acme";
-		return DriverManager.getConnection( url, "root", "" );
+		return DriverManager.getConnection( url, "root", "root" );
 	}
 	
 }
